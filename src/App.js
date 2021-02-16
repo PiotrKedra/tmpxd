@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import Sketch from 'react-p5';
+import * as ml5 from 'ml5';
 
 function App() {
+
+  useEffect(() => {
+  }, [])
+
+  const [video, setVideo] = useState(null);
+  // const [poseNet, setPoseNet] = useState(null);
+
+  const setup = async (p5, canvasParentRef) => {
+    p5.createCanvas(640, 480)
+    const init = p5.createCapture(p5.VIDEO);
+    init.hide();
+    setVideo(init)
+    ml5.poseNet(init, () => console.log('posenet rdy'))
+    // poseNet.on('pose', (poses) => console.log(poses))
+  }
+
+  const draw = (p5) => {
+    p5.image(video, 0, 0);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Sketch setup={setup} draw={draw}/>
     </div>
   );
 }
